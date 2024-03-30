@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,12 +26,17 @@ public class BookController {
     }
 
     @PostMapping("/create")
-    public String createBook(
-             @ModelAttribute BookDto bookDto,
-            BindingResult result
-    ){
-        return "Book created";
+    public ResponseEntity<String> createBook(@RequestBody BookDto bookDto) {
+        System.out.println(bookDto + " inserido");
+        Book book = new Book();
+        book.setTitle(bookDto.getTitle());
+        book.setAuthor(bookDto.getAuthor());
+        book.setDescription(bookDto.getDescription());
+
+        repo.save(book);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Book created");
     }
+
 
 
 
